@@ -1,0 +1,6 @@
+aiogram==2.24
+mysql==0.0.3
+mysql-connector==2.2.9
+mysql-connector-python==8.0.32
+mysqlclient==2.1.1
+requests

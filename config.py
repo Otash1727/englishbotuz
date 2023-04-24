@@ -1,0 +1,5 @@
+TOKEN=''
+host='localhost'
+passwd='Otash1727#'
+database1='myfirstbot'
+user1='root'
