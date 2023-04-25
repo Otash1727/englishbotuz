@@ -9,12 +9,10 @@ from keyboards.admin_keyboard import mixx,markup_admin_days,kun_markup
 from keyboards import admin_inline
 from keyboards.admin_inline import admin_kb,insert_remove_students,info_kb,delete_kb
 from aiogram.types import ReplyKeyboardRemove
-from database import mydb,mydb2
-from database.mydb import sql_add_command,sql_delete_command,sql_read2
+from database import mydb
+from database.mydb import sql_add_command,sql_delete_command,sql_read2,read_add_command
 from aiogram.types import InlineKeyboardButton,InlineKeyboardMarkup
-from database.mydb2 import sql_add_command2, sql_delete_command2,sql_readnew
-from keyboards import new_users
-from keyboards.new_users import info_new6,markup_new_days 
+
 
 
 ID=None
@@ -112,7 +110,6 @@ async def input_student(message:types.Message,state=FSMContext):
         async with state.proxy() as data:
             data['sure_name']=message.text.lower()
         await mydb.sql_add_command(state,message)
-        await mydb2.sql_add_command2(state, message)
         await bot.send_message(message.from_user.id, text='+')
         await state.finish()
 
@@ -191,59 +188,6 @@ async def def_callback_run(callback_query:types.CallbackQuery):
 
 
 
-async def click_new(message:types.Message):
-    if message.from_user.id ==ID:
-        if message.text.lower()=='new':
-            await bot.send_message(message.from_user.id,"Here you can see the new list",reply_markup=markup_new_days)
-        await message.delete()
-
-async def click_new_return(message:types.Message(),state:FSMContext):
-    if message.from_user.id== ID:
-        async with state.proxy() as neww:
-            curent_new_info= await state.get_state()
-            if curent_new_info is None:
-                return
-            await state.finish()
-        await bot.send_message(message.from_user.id,'Okey.You can start from the beginning ',reply_markup=mixx)
-
-async def click_new_add1(message:types.Message()):
-    if message.from_user.id== ID:
-        if message.text=="🇺🇿 Even day":
-            await New_info().first()
-            await bot.send_message(message.from_user.id," You have chosen Even days")
-        if message.text=="🇺🇿 Odd day":
-            await New_info.first()
-            await bot.send_message(message.from_user.id,"You have chosen Odd days")
-        await message.delete()
-
-async def click_new_add2(message:types.Message,state:FSMContext):
-    if message.from_user.id == ID:
-        async with state.proxy() as neww:
-            if message.text=='🇺🇿 Even day':
-                neww['new_day']='evendays'
-            if message.text=='🇺🇿 Odd day':
-                neww['new_day']='odddays'
-        await bot.send_message(message.from_user.id,'Select the time',reply_markup=info_new6)
-        await message.delete()
-        await New_info().next()
-
-async def click_new_time_add(callback:types.CallbackQuery,state:FSMContext):
-    if callback.from_user.id==ID:       
-        async with state.proxy() as neww:
-            if callback.data=='🔍🔍08-10':
-                neww['new_time']='08-10'
-            if callback.data=='🔍🔍10-12':
-                neww['new_time']='10-12'               
-            if callback.data=='🔍🔍14-16':
-                neww['new_time']='14-16'                
-            if callback.data=='🔍🔍16-18':
-                neww['new_time']='16-18'
-            if callback.data=='🔍🔍18-20':
-                neww['new_time']='18-20'
-        await callback.message.answer(f"The data of {neww['new_day']} {neww['new_time']} ")
-        await  mydb2.sql_readnew(callback, state)
-        await state.finish()     
-    
 
 
 
@@ -276,15 +220,6 @@ def register_handler_admin(dp:Dispatcher):
     dp.register_message_handler(click_info_add2,state=Read_info.dayss_info)
     dp.register_callback_query_handler(click_info_time_add,state=Read_info.time_info)
     dp.register_callback_query_handler(click_delete_users,Text(startswith=['delete']))
-    
-    dp.register_message_handler(click_new,Text(equals='New',ignore_case=True))
-    dp.register_message_handler(click_new_return,commands=['Cancel_new'],state='*')
-    dp.register_message_handler(click_new_return,Text(equals=['Cancel_new'],ignore_case=True),state='*')
-    dp.register_message_handler(click_new_add1,Text(equals=['🇺🇿 Even day','🇺🇿 Odd day']))
-    dp.register_message_handler(click_new_add2,state=New_info.new_day)
-    dp.register_callback_query_handler(click_new_time_add,state=New_info.new_time)
-   
-
     
     
     

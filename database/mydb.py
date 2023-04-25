@@ -8,7 +8,7 @@ from keyboards import admin_inline
 from keyboards.admin_inline import delete_kb
 from aiogram.types import InlineKeyboardButton,InlineKeyboardMarkup
 import re
-from config import host,passwr,user1,database1
+from config import host,passwd,user1,database1
 
 
 
@@ -16,18 +16,18 @@ from config import host,passwr,user1,database1
 
 def sql_start():
     global base_admin,cur_admin 
-    base_admin=sq.connect(host=host,password=passwr,user=user,database=database1)
+    base_admin=sq.connect(host=host,password=passwd,user=user1,database=database1)
     cur_admin=base_admin.cursor()
     if base_admin:
         print('Data base_admin connected OK!')
-    base_admin.execute('CREATE TABLE IF NOT EXISTS list_group(dars_kuni VARCHAR(255), dars_vaqti VARCHAR(255) , ism_familiya VARCHAR(255))')
+    cur_admin.execute('CREATE TABLE IF NOT EXISTS list_group(dars_kuni VARCHAR(255), dars_vaqti VARCHAR(255) , ism_familiya VARCHAR(255))')
     base_admin.commit()
     
 
 
 async def sql_add_command(state,message):    
     async with state.proxy() as data:
-        cur_admin.execute('INSERT INTO list_group VALUES(?,?,?)',tuple(data.values()))
+        cur_admin.execute('INSERT INTO list_group VALUES(%s,%s,%s)',tuple(data.values()))
         base_admin.commit()
         
 
@@ -37,11 +37,16 @@ async def sql_add_command(state,message):
 async def read_add_command(state,callback):    
     async with state.proxy() as menu_show:                 
         jadval2=[]
-        for jadval in cur_admin.execute('SELECT ism_familiya FROM list_group WHERE dars_kuni=? AND dars_vaqti=?',(menu_show['dayss_info'],menu_show['time_info'],)).fetchall():
+        polo=('''SELECT ism_familiya FROM list_group WHERE dars_kuni=%s AND dars_vaqti=%s''',(menu_show['dayss_info'],menu_show['time_info'],))
+        cur_admin.execute(polo)
+        polo1=cur_admin.fetchall()
+        for jadval in polo1:
             jadval2.append(jadval)
-       
         if jadval2 !=[]:
-            for jadval3 in cur_admin.execute('SELECT ism_familiya FROM list_group WHERE dars_kuni=? AND dars_vaqti=?',(menu_show['dayss_info'],menu_show['time_info'],)).fetchall():
+            polo2=cur_admin.execute('SELECT ism_familiya FROM list_group WHERE dars_kuni=? AND dars_vaqti=?',(menu_show['dayss_info'],menu_show['time_info'],))
+            cur_admin.execute(polo2)
+            polo3=cur_admin.fetchall()
+            for jadval3 in polo3:
                 await callback.message.answer(re.sub("[(),'']",'',str(jadval3)))
             await callback.message.answer('Delete the data',reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton(f"delete {menu_show['dayss_info']}-{menu_show['time_info']}",callback_data=f"delete {menu_show['dayss_info']}-{menu_show['time_info']}")))         
         else: 
@@ -49,16 +54,19 @@ async def read_add_command(state,callback):
 
 
 async def sql_delete_command(data):
-    cur_admin.execute('DELETE FROM list_group WHERE ism_familiya= ? ',(data,))
+    cur_admin.execute('DELETE FROM list_group WHERE ism_familiya=%s',(data,))
     base_admin.commit()
-    cur.execute('DELETE  FROM list_users WHERE users_name=? ',(data,))
+    cur.execute('DELETE  FROM list_users WHERE users_name=%s',(data,))
     base.commit()
 
     
 
 async def sql_read2(callback,state):
     async with state.proxy() as menu_show:
-        return cur_admin.execute('SELECT * FROM list_group WHERE dars_kuni=?  AND dars_vaqti=?',(menu_show['dayss_info'],menu_show['time_info'])).fetchall() 
+        polo4=('SELECT * FROM list_group WHERE dars_kuni=?  AND dars_vaqti=?',(menu_show['dayss_info'],menu_show['time_info']))
+        cur_admin.execute(polo)
+        polo5=cur_admin.fetchall()
+        return polo5
 
 
 # async def copy_group(message):

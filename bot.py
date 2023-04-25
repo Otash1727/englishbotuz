@@ -1,6 +1,6 @@
 from create_bot import dp ,bot
 from aiogram import executor,Dispatcher
-from database import mydb,mytest,myusers,mydb2
+from database import mydb,mytest,myusers
 
 
 async def on_startup(_):
@@ -8,7 +8,6 @@ async def on_startup(_):
     mydb.sql_start()
     mytest.sql_test()
     myusers.sql_users()
-    mydb2.sql_start2()
 
 
 from handlers import client
