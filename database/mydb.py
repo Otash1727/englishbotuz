@@ -37,14 +37,16 @@ async def sql_add_command(state,message):
 async def read_add_command(state,callback):    
     async with state.proxy() as menu_show:                 
         jadval2=[]
-        polo=('''SELECT ism_familiya FROM list_group WHERE dars_kuni=%s AND dars_vaqti=%s''',(menu_show['dayss_info'],menu_show['time_info'],))
-        cur_admin.execute(polo)
+        polo=('''SELECT ism_familiya FROM list_group WHERE dars_kuni=%s AND dars_vaqti=%s''')
+        tt=(menu_show['dayss_info'],menu_show['time_info'],)
+        cur_admin.execute(polo,tt)
         polo1=cur_admin.fetchall()
         for jadval in polo1:
             jadval2.append(jadval)
         if jadval2 !=[]:
-            polo2=cur_admin.execute('SELECT ism_familiya FROM list_group WHERE dars_kuni=? AND dars_vaqti=?',(menu_show['dayss_info'],menu_show['time_info'],))
-            cur_admin.execute(polo2)
+            polo2=('''SELECT ism_familiya FROM list_group WHERE dars_kuni=%s AND dars_vaqti=%s''')
+            tt2=(menu_show['dayss_info'],menu_show['time_info'],)
+            cur_admin.execute(polo2,tt2)
             polo3=cur_admin.fetchall()
             for jadval3 in polo3:
                 await callback.message.answer(re.sub("[(),'']",'',str(jadval3)))
@@ -63,8 +65,9 @@ async def sql_delete_command(data):
 
 async def sql_read2(callback,state):
     async with state.proxy() as menu_show:
-        polo4=('SELECT * FROM list_group WHERE dars_kuni=?  AND dars_vaqti=?',(menu_show['dayss_info'],menu_show['time_info']))
-        cur_admin.execute(polo)
+        polo4=('''SELECT * FROM list_group WHERE dars_kuni=%s  AND dars_vaqti=%s''')
+        tt3=(menu_show['dayss_info'],menu_show['time_info'],)
+        cur_admin.execute(polo4,tt3)
         polo5=cur_admin.fetchall()
         return polo5
 

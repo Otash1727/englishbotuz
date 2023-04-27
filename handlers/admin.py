@@ -171,7 +171,7 @@ async def click_info_time_add(callback:types.CallbackQuery,state:FSMContext):
 async def click_delete_users(callback:types.CallbackQuery,state:FSMContext):
     if callback.from_user.id==ID:
         async with state.proxy() as menu_show:
-            hh= await mydb.sql_read2(callback, state)
+            hh=await mydb.sql_read2(callback,state)
             for hh2 in hh:              
                 await callback.message.answer(f'{hh2[2]}',reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton(f"del {hh2[2]}",callback_data=f'del {hh2[2]}')))
         await state.finish()
