@@ -58,6 +58,8 @@ async def read_add_command(state,callback):
 async def sql_delete_command(data):
     cur_admin.execute('DELETE FROM list_group WHERE ism_familiya=%s',(data,))
     base_admin.commit()
+    base=sq.connect(host=host,user=user1,password=passwd,database=database1)
+    cur=base.cursor()
     cur.execute('DELETE  FROM list_users WHERE users_name=%s',(data,))
     base.commit()
 
