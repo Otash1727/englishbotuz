@@ -14,21 +14,22 @@ def  sql_users():
     cur=base.cursor()
     if base:
         print('Data_users connect')
-    cur.execute('CREATE TABLE IF NOT EXISTS list_users(users_days VARCHAR(255),users_time VARCHAR(255) ,users_name VARCHAR(255),users_contact VARCHAR(255),users_tg_id VARCHAR(255))')    
+    cur.execute('CREATE TABLE IF NOT EXISTS list_users(users_days VARCHAR(255),users_time VARCHAR(255) ,users_name VARCHAR(255),users_contact VARCHAR(255),users_tg_id VARCHAR(15))')    
+    base.commit()
+    cur.execute("INSERT INTO list_users(users_days,users_time,users_name,users_contact,users_tg_id) VALUES('otash','ok','ok','ok','0000')")
     base.commit()
 
-
-
-
 async def tekshiruv_2(message):
-    polo8=("SELECT users_tg_id FROM list_users WHERE users_tg_id=%s ")
+    polo8=("SELECT * FROM list_users WHERE users_tg_id=%s ")
     tt98=(message.from_user.id,)
     cur.execute(polo8,tt98)
     royhat_2=cur.fetchall()
-    for refd in royhat_2:
-        refd
-    if str(message.from_user.id) in str(refd):
-        await message.answer('You registered before \n Press the button ‘My account’ to start the test',reply_markup=account_markup)    
+    print(royhat_2)
+    if royhat_2!=[]:
+        for refd in royhat_2:
+            refd
+        if message.from_user.id in refd:
+            await message.answer('You registered before \n Press the button ‘My account’ to start the test',reply_markup=account_markup)    
     else:
         await  message.answer('Send your phone number to use the bot',reply_markup=contact_markup) 
        
