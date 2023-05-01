@@ -27,8 +27,11 @@ def sql_start():
 
 async def sql_add_command(state,message):    
     async with state.proxy() as data:
-        cur_admin.execute('INSERT INTO list_group VALUES(%s,%s,%s)',tuple(data.values()))
+        polo29=('INSERT INTO list_group VALUES(%s,%s,%s)')
+        tt030=tuple(data.values())
+        cur_admin.execute(polo29,tt030)
         base_admin.commit()
+     
         
 
         
@@ -56,12 +59,12 @@ async def read_add_command(state,callback):
 
 
 async def sql_delete_command(data):
-    cur_admin.execute('DELETE FROM list_group WHERE ism_familiya=%s',(data,))
+    polo26=('DELETE FROM list_group WHERE ism_familiya=%s')
+    tt012=(data,)
+    cur_admin.execute(polo26,tt012)
     base_admin.commit()
-    base=sq.connect(host=host,user=user1,password=passwd,database=database1)
-    cur=base.cursor()
-    cur.execute('DELETE  FROM list_users WHERE users_name=%s',(data,))
-    base.commit()
+   
+   
 
     
 

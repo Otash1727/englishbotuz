@@ -20,19 +20,16 @@ def  sql_users():
     base.commit()
 
 async def tekshiruv_2(message):
-    polo8=("SELECT * FROM list_users WHERE users_tg_id=%s ")
-    tt98=(message.from_user.id,)
-    cur.execute(polo8,tt98)
+    polo8=("SELECT users_tg_id FROM list_users")
+    cur.execute(polo8)
     royhat_2=cur.fetchall()
     print(royhat_2)
-    if royhat_2!=[]:
-        for refd in royhat_2:
-            refd
-        if message.from_user.id in refd:
-            await message.answer('You registered before \n Press the button ‘My account’ to start the test',reply_markup=account_markup)    
+    for refd in royhat_2:
+        refd
+    if message.from_user.id in refd:
+        await message.answer('You registered before \n Press the button ‘My account’ to start the test',reply_markup=account_markup)         
     else:
         await  message.answer('Send your phone number to use the bot',reply_markup=contact_markup) 
-       
 
 
 
@@ -74,8 +71,11 @@ async def add_users_info(state,message):
         for www in polo13:
             foo_group.append(www)
         if foo_group != []:
-            cur.execute("INSERT INTO list_users(users_days,users_time,users_name,users_contact,users_tg_id) VALUES(%s,%s,%s,%s,%s)",tuple(dd.values()))
+            polo50=("INSERT INTO list_users(users_days,users_time,users_name,users_contact,users_tg_id) VALUES(%s,%s,%s,%s,%s)")
+            tt35=tuple(dd.values())
+            cur.execute(polo50,tt35)
             base.commit()
+           
             await message.answer('You have registered \n Press the button ‘My account’ to start the test',reply_markup=account_markup)
         else:
             await message.answer('You entered the wrong information.\nTry again. ',reply_markup=contact_markup)    
@@ -85,6 +85,16 @@ async def copy_users(message):
     polo14=('SELECT (users_days,users_time,users_name) FROM list_users ')
     cur.execute(polo14)
     bb_users=cur.fetchall()
+
+
+async def sql_delete_command2(data):
+        base=sq.connect(host=host,user=user1,password=passwd,database=database1)
+        cur=base.cursor()
+        polo27=('DELETE  FROM list_users WHERE users_name=%s')
+        tt013=(data,)
+        cur.execute(polo27,tt013)
+        base.commit()
+       
 
 
 async def send_result(state,message):    
@@ -142,5 +152,6 @@ async def send_result_audio(state,message,audio_id):
         cur.execute(polo24,tt011)
         polo25=cur.fetchall()  
         for b6 in polo25:
-            await bot.send_audio(chat_id=re.sub("[(),'']",'',str(b6)), audio=audio_id)        
+            await bot.send_audio(chat_id=re.sub("[(),'']",'',str(b6)), audio=audio_id)  
+              
                   

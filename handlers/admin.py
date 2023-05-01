@@ -12,6 +12,8 @@ from aiogram.types import ReplyKeyboardRemove
 from database import mydb
 from database.mydb import sql_add_command,sql_delete_command,sql_read2,read_add_command
 from aiogram.types import InlineKeyboardButton,InlineKeyboardMarkup
+from database import myusers
+from database.myusers import sql_delete_command2
 
 
 
@@ -181,7 +183,7 @@ async def click_delete_users(callback:types.CallbackQuery,state:FSMContext):
 @dp.callback_query_handler(lambda x: x.data and x.data.startswith('del '))
 async def def_callback_run(callback_query:types.CallbackQuery):
     await mydb.sql_delete_command(callback_query.data.replace('del ', ''))
-    # await myusers.sql_delete_command2(callback_query.data.replace('dd ', ''))
+    await myusers.sql_delete_command2(callback_query.data.replace('del ', ''))
     await callback_query.answer(text=f'{callback_query.data.replace("del ", "")} deleted.',show_alert=True)
 
 
