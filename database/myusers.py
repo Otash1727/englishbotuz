@@ -16,8 +16,7 @@ def  sql_users():
         print('Data_users connect')
     cur.execute('CREATE TABLE IF NOT EXISTS list_users(users_days VARCHAR(255),users_time VARCHAR(255) ,users_name VARCHAR(255),users_contact VARCHAR(255),users_tg_id VARCHAR(255))')    
     base.commit()
-    cur.execute("INSERT INTO list_users(users_days,users_time,users_name,users_contact,users_tg_id) VALUES(NULL,NULL,NULL,NULL,NULL)")
-    base.commit()
+
 
 
 
