@@ -40,6 +40,8 @@ class Users_info(StatesGroup):
 async def start(message:types.Message):
     if message.text=='/start':      
         await myusers.tekshiruv_2(message)
+
+
         
         
 
